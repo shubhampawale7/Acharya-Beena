@@ -1,0 +1,36 @@
+/* client/src/index.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+    @apply font-sans;
+  transition: background-color 0.5s ease;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+/* We still need the keyframes for our component to use */
+@keyframes move-stars-back {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-10000px, 5000px, 0); }
+}
+
+@keyframes move-twink-back {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-10000px, 5000px, 0); }
+}
+
+/* --- ADD THIS NEW KEYFRAME --- */
+@keyframes move-clouds-back {
+  from { background-position: 0 0; }
+  to { background-position: 10000px 0; }
+}

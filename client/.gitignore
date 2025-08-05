@@ -1,0 +1,28 @@
+# Dependencies
+/node_modules
+
+# Build output folder
+/dist
+
+# Vite cache directory
+/.vite
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs and test reports
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/coverage
+
+# System files from macOS and Windows
+.DS_Store
+
+# Editor directories and files
+.idea
+.vscode/
