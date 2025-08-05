@@ -20,21 +20,16 @@ body {
 }
 /* We still need the keyframes for our component to use */
 @keyframes move-stars-back {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-10000px, 5000px, 0); }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
-@keyframes move-twink-back {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-10000px, 5000px, 0); }
-}
 
-/* --- ADD THIS NEW KEYFRAME --- */
+/* This animation moves the clouds/nebula layer */
 @keyframes move-clouds-back {
-  from { background-position: 0 0; }
-  to { background-position: 10000px 0; }
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); } /* We'll move the entire width of the screen */
 }
-
 /* React DayPicker Custom Theme */
 :root {
   --rdp-cell-size: 40px;

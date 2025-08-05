@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// --- FIXED: Added useMotionValue and useTransform to the main import ---
-import { motion, useInView, useMotionValue, useTransform } from "framer-motion";
+import {
+  LazyMotion,
+  domAnimation,
+  m as motion,
+  useInView,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 import Meta from "../components/common/Meta";
 import {
   BookOpenIcon,
@@ -70,9 +76,7 @@ const servicesList = [
 ];
 
 const ServiceCard = ({ service }) => {
-  // --- FIXED: The incorrect line 'const { useMotionValue... }' has been removed from here ---
   const cardRef = React.useRef(null);
-  // These hooks now correctly reference the top-level import
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -99,18 +103,18 @@ const ServiceCard = ({ service }) => {
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
-        perspective: 1000,
+        perspective: 800,
+        willChange: "transform",
       }}
-      className="relative flex flex-col h-full p-8 rounded-3xl bg-white/60 dark:bg-gray-500/10 backdrop-blur-xl ring-1 ring-black/5 dark:ring-white/10 shadow-xl dark:shadow-2xl"
+      className="relative flex flex-col h-full p-8 rounded-3xl bg-white/60 dark:bg-gray-500/10 backdrop-blur-md ring-1 ring-black/5 dark:ring-white/10 shadow-lg dark:shadow-xl"
     >
       <div
         style={{ transform: "translateZ(40px)", transformStyle: "preserve-3d" }}
         className="flex flex-col flex-auto"
       >
         <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-nebula-purple/10 ring-1 ring-nebula-purple/30">
-          <div className="absolute inset-0 rounded-2xl bg-nebula-purple/20 blur-xl animate-pulse"></div>
           <service.icon
-            className="h-8 w-8 text-nebula-purple"
+            className="h-8 w-8 text-nebula-purple z-10"
             aria-hidden="true"
           />
         </div>
@@ -136,7 +140,7 @@ const ServiceCard = ({ service }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-full rounded-full bg-nebula-purple px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-nebula-purple/20 hover:shadow-nebula-purple/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nebula-purple"
+              className="w-full rounded-full bg-nebula-purple px-4 py-3 text-sm font-semibold text-white shadow-md hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nebula-purple"
             >
               Book Now
             </motion.button>
@@ -149,7 +153,10 @@ const ServiceCard = ({ service }) => {
 
 const ServicesPage = () => {
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
+  const isInView = useInView(ref, {
+    once: true,
+    amount: 0.2,
+  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -173,36 +180,38 @@ const ServicesPage = () => {
       />
       <div className="bg-transparent py-24 sm:py-32">
         <div ref={ref} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center"
-          >
-            <h2 className="text-base font-semibold leading-7 text-nebula-purple">
-              Our Offerings
-            </h2>
-            <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-starlight sm:text-5xl font-serif">
-              Services to Guide Your Way
-            </p>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-300">
-              Choose from a range of authentic astrological services designed to
-              bring you clarity, purpose, and cosmic insight.
-            </p>
-          </motion.div>
+          <LazyMotion features={domAnimation}>
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-center"
+            >
+              <h2 className="text-base font-semibold leading-7 text-nebula-purple">
+                Our Offerings
+              </h2>
+              <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-starlight sm:text-5xl font-serif">
+                Services to Guide Your Way
+              </p>
+              <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-300">
+                Choose from a range of authentic astrological services designed
+                to bring you clarity, purpose, and cosmic insight.
+              </p>
+            </motion.div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {servicesList.map((service) => (
-              <motion.div key={service.name} variants={itemVariants}>
-                <ServiceCard service={service} />
-              </motion.div>
-            ))}
-          </motion.div>
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {servicesList.map((service) => (
+                <motion.div key={service.name} variants={itemVariants}>
+                  <ServiceCard service={service} />
+                </motion.div>
+              ))}
+            </motion.div>
+          </LazyMotion>
         </div>
       </div>
     </>

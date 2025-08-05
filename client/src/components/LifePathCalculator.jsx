@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   SparklesIcon,
@@ -10,6 +10,7 @@ import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 
+// prettier-ignore
 const interpretations = {
   1: "As a natural leader, you are independent, ambitious, and a pioneer charting new paths.",
   2: "As a peacemaker, you are diplomatic, intuitive, and possess a unique ability to create harmony.",
@@ -73,6 +74,16 @@ const LifePathCalculator = () => {
     setError("");
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+        setIsPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const contentVariants = {
     hidden: { opacity: 0, x: -50 },
     visible: {
@@ -81,7 +92,6 @@ const LifePathCalculator = () => {
       transition: { duration: 0.8, ease: "easeOut" },
     },
   };
-
   const toolVariants = {
     hidden: { opacity: 0, x: 50 },
     visible: {
@@ -90,7 +100,6 @@ const LifePathCalculator = () => {
       transition: { duration: 0.8, ease: "easeOut", delay: 0.2 },
     },
   };
-
   const formContentVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -98,8 +107,8 @@ const LifePathCalculator = () => {
   };
 
   return (
-    // The main container is now transparent
-    <div className="relative bg-transparent py-24 sm:py-32">
+    // --- ADD z-20 TO THIS LINE ---
+    <div className="relative bg-transparent py-24 sm:py-32 z-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12 items-center">
           <motion.div
@@ -127,10 +136,10 @@ const LifePathCalculator = () => {
                     transition: { delay: 0.5, duration: 0.6 },
                   }}
                   exit={{ opacity: 0 }}
-                  className="mt-8 p-6 rounded-2xl bg-slate-100 dark:bg-black/10 backdrop-blur-sm"
+                  className="mt-8 p-6 rounded-2xl bg-slate-100 dark:bg-deep-space/50 backdrop-blur-sm ring-1 ring-black/5 dark:ring-white/10"
                 >
-                  <h3 className="font-serif text-2xl font-semibold text-nebula-purple">
-                    Interpretation
+                  <h3 className="font-serif text-2xl font-semibold text-indigo-600 dark:text-nebula-purple">
+                    Interpretation for Number {lifePathNumber}
                   </h3>
                   <p className="mt-2 text-gray-600 dark:text-gray-300">
                     {interpretations[lifePathNumber]}
@@ -145,7 +154,7 @@ const LifePathCalculator = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            className="relative p-8 rounded-3xl bg-white/60 dark:bg-gray-500/10 backdrop-blur-2xl ring-1 ring-black/5 dark:ring-white/10 shadow-xl dark:shadow-2xl min-h-[350px]"
+            className="relative p-8 rounded-3xl bg-white/60 dark:bg-deep-space/30 backdrop-blur-2xl ring-1 ring-black/5 dark:ring-white/10 shadow-xl dark:shadow-2xl min-h-[350px]"
           >
             <AnimatePresence mode="wait">
               {lifePathNumber === null ? (
@@ -157,7 +166,7 @@ const LifePathCalculator = () => {
                   exit="exit"
                   className="flex flex-col items-center justify-center text-center h-full"
                 >
-                  <SparklesIcon className="h-10 w-10 text-nebula-purple" />
+                  <SparklesIcon className="h-10 w-10 text-indigo-600 dark:text-nebula-purple" />
                   <h3 className="mt-2 text-2xl font-bold text-gray-900 dark:text-starlight">
                     Unlock Your Number
                   </h3>
@@ -165,7 +174,7 @@ const LifePathCalculator = () => {
                     <button
                       type="button"
                       onClick={() => setIsPickerOpen(!isPickerOpen)}
-                      className="flex items-center gap-x-2 rounded-full border-0 px-5 py-3 bg-white/50 dark:bg-white/10 text-gray-800 dark:text-starlight shadow-sm ring-1 ring-inset ring-black/10 dark:ring-white/20 focus:ring-2 focus:ring-inset focus:ring-nebula-purple transition"
+                      className="flex items-center gap-x-2 rounded-full border-0 px-5 py-3 bg-white/50 dark:bg-slate-800/50 text-gray-800 dark:text-starlight shadow-sm ring-1 ring-inset ring-black/10 dark:ring-white/20 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-nebula-purple transition"
                     >
                       <CalendarDaysIcon className="h-5 w-5 text-gray-400" />
                       <span
@@ -187,7 +196,7 @@ const LifePathCalculator = () => {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute top-full mt-2 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl shadow-2xl p-4 ring-1 ring-black/10 dark:ring-white/10"
+                          className="absolute top-full mt-2 z-50 bg-white/90 dark:bg-indigo-850/90 backdrop-blur-md rounded-2xl shadow-2xl p-2 ring-1 ring-black/10 dark:ring-white/10"
                         >
                           <DayPicker
                             mode="single"
@@ -202,11 +211,10 @@ const LifePathCalculator = () => {
                       )}
                     </AnimatePresence>
                   </div>
-
                   <motion.button
                     type="button"
                     onClick={handleSubmit}
-                    className="mt-6 rounded-full bg-nebula-purple px-10 py-3 font-semibold text-white shadow-lg shadow-nebula-purple/20 hover:shadow-nebula-purple/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nebula-purple"
+                    className="mt-6 rounded-full bg-indigo-600 dark:bg-nebula-purple px-10 py-3 font-semibold text-white shadow-lg shadow-indigo-500/20 dark:shadow-nebula-purple/20 hover:shadow-indigo-500/40 dark:hover:shadow-nebula-purple/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -227,9 +235,9 @@ const LifePathCalculator = () => {
                   exit="exit"
                   className="flex flex-col items-center justify-center text-center h-full"
                 >
-                  <div className="relative flex h-48 w-48 items-center justify-center rounded-full bg-gradient-to-br from-nebula-purple/10 to-transparent dark:from-nebula-purple/20 dark:to-deep-space/30 ring-1 ring-black/5 dark:ring-white/20 shadow-xl dark:shadow-2xl">
-                    <div className="absolute inset-0 rounded-full animate-pulse bg-nebula-purple/10 dark:bg-nebula-purple/20 blur-xl"></div>
-                    <span className="relative text-8xl font-bold text-gray-900 dark:text-starlight">
+                  <div className="relative flex h-48 w-48 items-center justify-center rounded-full bg-gradient-to-br from-indigo-50 to-transparent dark:from-nebula-purple/20 dark:to-deep-space/30 ring-1 ring-black/5 dark:ring-white/20 shadow-xl dark:shadow-2xl">
+                    <div className="absolute inset-0 rounded-full animate-pulse bg-indigo-100/50 dark:bg-nebula-purple/20 blur-xl"></div>
+                    <span className="relative font-serif text-8xl font-bold text-gray-900 dark:text-starlight">
                       <AnimatedNumber value={lifePathNumber} />
                     </span>
                   </div>

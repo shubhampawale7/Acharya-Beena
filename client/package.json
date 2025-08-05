@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
+    "@studio-freight/lenis": "^1.0.42",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "react": "^19.1.0",
