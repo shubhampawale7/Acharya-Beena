@@ -19,7 +19,7 @@ import ServicesPage from "./pages/ServicesPage";
 import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
+
 import BlogPage from "./pages/BlogPage";
 import SinglePostPage from "./pages/SinglePostPage";
 import MyBookingsPage from "./pages/MyBookingsPage";

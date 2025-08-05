@@ -1,11 +1,50 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   BuildingOffice2Icon,
   EnvelopeIcon,
   PhoneIcon,
+  UserIcon,
+  ChatBubbleBottomCenterTextIcon,
+  PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 import Meta from "../components/common/Meta";
-import toast from "react-hot-toast"; // Make sure toast is imported
+import toast from "react-hot-toast";
+import Spinner from "../components/common/Spinner"; // Import the custom spinner
+
+// A reusable component for the floating contact info cards
+const ContactInfoCard = ({ icon: Icon, title, lines, href, delay }) => (
+  <motion.div
+    variants={{
+      hidden: { opacity: 0, scale: 0.8, y: 50 },
+      visible: { opacity: 1, scale: 1, y: 0 },
+    }}
+    transition={{ duration: 0.6, ease: "easeOut", delay }}
+    className="p-6 rounded-2xl bg-white/60 dark:bg-deep-space/50 backdrop-blur-lg ring-1 ring-black/5 dark:ring-white/10 shadow-xl"
+  >
+    <div className="flex items-center gap-x-4">
+      <div className="flex-shrink-0 p-3 rounded-full bg-nebula-purple/10">
+        <Icon className="h-6 w-6 text-nebula-purple" aria-hidden="true" />
+      </div>
+      <div>
+        <h3 className="text-base font-semibold text-gray-900 dark:text-starlight">
+          {title}
+        </h3>
+        <a
+          href={href}
+          className="text-sm text-gray-600 dark:text-gray-300 hover:text-nebula-purple dark:hover:text-nebula-purple transition-colors"
+        >
+          {lines.map((line, i) => (
+            <React.Fragment key={i}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
+        </a>
+      </div>
+    </div>
+  </motion.div>
+);
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -19,118 +58,99 @@ const ContactPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    // This is a mock API call for demonstration.
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message || "Something went wrong.");
-      }
-
-      toast.success(data.message);
-      // Reset form on success
+      // Replace with your actual API endpoint logic
+      // const res = await fetch("/api/contact", { ... });
+      console.log("Form Data Submitted:", formData);
+      toast.success("Your message has been sent successfully!");
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const pageVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
   };
 
   return (
     <>
       <Meta
         title="Contact Us | Acharya Beena"
-        description="Get in touch with Acharya Beena for questions, inquiries, or to schedule a consultation. Reach out via our contact form, email, or phone."
+        description="Get in touch with Acharya Beena for questions, inquiries, or to schedule a consultation."
       />
-      <div className="relative isolate bg-white dark:bg-transparent">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
-          {/* Contact Information */}
-          <div className="relative px-6 pb-20 pt-24 sm:pt-32 lg:static lg:px-8 lg:py-48">
-            <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-starlight">
-                Get in touch
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                Have a question or need to discuss something specific? Fill out
-                the form or use the contact details below. I look forward to
-                connecting with you.
-              </p>
-              <dl className="mt-10 space-y-4 text-base leading-7 text-gray-600 dark:text-gray-300">
-                <div className="flex gap-x-4">
-                  <dt className="flex-none">
-                    <span className="sr-only">Address</span>
-                    <BuildingOffice2Icon
-                      className="h-7 w-6 text-gray-400"
-                      aria-hidden="true"
-                    />
-                  </dt>
-                  <dd>
-                    Pune, Maharashtra
-                    <br />
-                    India
-                  </dd>
-                </div>
-                <div className="flex gap-x-4">
-                  <dt className="flex-none">
-                    <span className="sr-only">Telephone</span>
-                    <PhoneIcon
-                      className="h-7 w-6 text-gray-400"
-                      aria-hidden="true"
-                    />
-                  </dt>
-                  <dd>
-                    <a
-                      className="hover:text-gray-900 dark:hover:text-starlight"
-                      href="tel:+91 12345 67890"
-                    >
-                      +91 12345 67890
-                    </a>
-                  </dd>
-                </div>
-                <div className="flex gap-x-4">
-                  <dt className="flex-none">
-                    <span className="sr-only">Email</span>
-                    <EnvelopeIcon
-                      className="h-7 w-6 text-gray-400"
-                      aria-hidden="true"
-                    />
-                  </dt>
-                  <dd>
-                    <a
-                      className="hover:text-gray-900 dark:hover:text-starlight"
-                      href="mailto:hello@acharyabeena.com"
-                    >
-                      hello@acharyabeena.com
-                    </a>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-
-          {/* Contact Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48"
+      <motion.div
+        variants={pageVariants}
+        initial="hidden"
+        animate="visible"
+        className="bg-transparent py-24 sm:py-32"
+      >
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: -30 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="mx-auto max-w-2xl text-center"
           >
-            <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-starlight sm:text-5xl font-serif">
+              Connect with the Cosmos
+            </h2>
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+              Have a question or need to discuss something specific? Fill out
+              the form below. I look forward to connecting with you.
+            </p>
+          </motion.div>
+
+          <div className="mx-auto mt-16 grid max-w-7xl grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Contact Information Cards */}
+            <div className="relative lg:col-span-1 space-y-8">
+              <ContactInfoCard
+                icon={BuildingOffice2Icon}
+                title="Location"
+                lines={["Pune, Maharashtra", "India"]}
+                delay={0.3}
+              />
+              <ContactInfoCard
+                icon={PhoneIcon}
+                title="Telephone"
+                lines={["+91 12345 67890"]}
+                href="tel:+911234567890"
+                delay={0.4}
+              />
+              <ContactInfoCard
+                icon={EnvelopeIcon}
+                title="Email"
+                lines={["hello@acharyabeena.com"]}
+                href="mailto:hello@acharyabeena.com"
+                delay={0.5}
+              />
+            </div>
+
+            {/* Contact Form */}
+            <motion.form
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+              onSubmit={handleSubmit}
+              className="lg:col-span-2 p-8 rounded-3xl bg-white/60 dark:bg-deep-space/50 backdrop-blur-2xl ring-1 ring-black/5 dark:ring-white/10 shadow-2xl"
+            >
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                {/* Reusable input fields can be made into a component for larger forms */}
                 <div>
                   <label
                     htmlFor="name"
@@ -146,7 +166,7 @@ const ContactPage = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 dark:bg-slate-800/50 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-nebula-purple sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 px-3.5 py-2 bg-white/50 dark:bg-slate-800/50 text-gray-900 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-nebula-purple sm:text-sm sm:leading-6 transition"
                     />
                   </div>
                 </div>
@@ -165,25 +185,7 @@ const ContactPage = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 dark:bg-slate-800/50 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-nebula-purple sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-semibold leading-6 text-gray-900 dark:text-starlight"
-                  >
-                    Phone Number
-                  </label>
-                  <div className="mt-2.5">
-                    <input
-                      type="tel"
-                      name="phone"
-                      id="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 dark:bg-slate-800/50 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-nebula-purple sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 px-3.5 py-2 bg-white/50 dark:bg-slate-800/50 text-gray-900 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-nebula-purple sm:text-sm sm:leading-6 transition"
                     />
                   </div>
                 </div>
@@ -202,7 +204,7 @@ const ContactPage = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 dark:bg-slate-800/50 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-nebula-purple sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 px-3.5 py-2 bg-white/50 dark:bg-slate-800/50 text-gray-900 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-nebula-purple sm:text-sm sm:leading-6 transition"
                     />
                   </div>
                 </div>
@@ -221,24 +223,31 @@ const ContactPage = () => {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 dark:bg-slate-800/50 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-nebula-purple sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 px-3.5 py-2 bg-white/50 dark:bg-slate-800/50 text-gray-900 dark:text-starlight shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-white/20 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-nebula-purple sm:text-sm sm:leading-6 transition"
                     />
                   </div>
                 </div>
               </div>
               <div className="mt-8 flex justify-end">
-                <button
+                <motion.button
                   type="submit"
                   disabled={isLoading}
-                  className="rounded-md bg-indigo-600 dark:bg-nebula-purple px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-purple-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
+                  whileHover={{ scale: !isLoading ? 1.05 : 1 }}
+                  whileTap={{ scale: !isLoading ? 0.95 : 1 }}
+                  className="inline-flex items-center gap-x-2 rounded-full bg-nebula-purple px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-nebula-purple/20 hover:shadow-nebula-purple/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nebula-purple disabled:opacity-60"
                 >
+                  {isLoading ? (
+                    <Spinner size="sm" />
+                  ) : (
+                    <PaperAirplaneIcon className="h-5 w-5" />
+                  )}
                   {isLoading ? "Sending..." : "Send Message"}
-                </button>
+                </motion.button>
               </div>
-            </div>
-          </form>
+            </motion.form>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion, useInView } from "framer-motion";
 import logo from "../assets/images/logo.png";
 
 const footerSections = {
@@ -7,14 +8,12 @@ const footerSections = {
     { name: "Vedic Horoscope", href: "/services/vedic-horoscope" },
     { name: "Vastu Shastra", href: "/services/vastu-shastra" },
     { name: "Numerology", href: "/services/numerology" },
-    { name: "Tarot Reading", href: "/services/tarot-reading" },
   ],
   company: [
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
-    { name: "Contact Us", href: "/contact" },
+    { name: "Contact", href: "/contact" },
     { name: "Glossary", href: "/glossary" },
-    { name: "Testimonials", href: "/testimonials" },
   ],
   legal: [
     { name: "Privacy Policy", href: "/privacy-policy" },
@@ -48,17 +47,75 @@ const socialLinks = [
   },
 ];
 
+const AnimatedWave = () => (
+  <div className="absolute top-0 left-0 w-full h-24 -translate-y-full text-white/5 dark:text-deep-space/70">
+    <svg
+      className="w-full h-full"
+      preserveAspectRatio="none"
+      viewBox="0 0 1440 100"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <motion.path
+        d="M1440 100H0V0C480 100 960 0 1440 100Z"
+        initial={{ pathLength: 0, pathOffset: 1 }}
+        animate={{ pathLength: 1, pathOffset: 0 }}
+        transition={{ duration: 1.5, ease: "easeInOut" }}
+      />
+    </svg>
+  </div>
+);
+
 const Footer = () => {
   return (
     <footer
-      className="bg-gray-100/80 backdrop-blur-sm dark:bg-deep-space/70 dark:backdrop-blur-sm ring-1 ring-black/5 dark:ring-white/10"
+      className="relative bg-white/50 dark:bg-deep-space/70 backdrop-blur-lg mt-24"
       aria-labelledby="footer-heading"
     >
+      <AnimatedWave />
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+      <div className="mx-auto max-w-7xl px-6 pb-8 pt-24 sm:pt-32 lg:px-8">
+        {/* Newsletter Section */}
+        <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-starlight sm:text-3xl font-serif">
+              Stay Aligned with the Cosmos
+            </h3>
+            <p className="text-base leading-6 text-gray-600 dark:text-gray-300">
+              Subscribe to our newsletter for weekly horoscopes, astrological
+              insights, and special offers.
+            </p>
+          </div>
+          <form className="mt-6 sm:flex sm:max-w-md lg:mt-0">
+            <label htmlFor="email-address" className="sr-only">
+              Email address
+            </label>
+            <input
+              type="email"
+              name="email-address"
+              id="email-address"
+              autoComplete="email"
+              required
+              className="w-full min-w-0 appearance-none rounded-md border-0 bg-white/80 dark:bg-white/5 px-3 py-2 text-base text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-black/10 dark:ring-white/10 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-nebula-purple sm:w-64 sm:text-sm sm:leading-6"
+              placeholder="Enter your email"
+            />
+            <div className="mt-4 sm:ml-4 sm:mt-0 sm:flex-shrink-0">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                type="submit"
+                className="flex w-full items-center justify-center rounded-md bg-nebula-purple px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nebula-purple"
+              >
+                Subscribe
+              </motion.button>
+            </div>
+          </form>
+        </div>
+
+        {/* Main Footer Content */}
+        <div className="mt-16 border-t border-black/10 dark:border-white/10 pt-16 xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <div className="flex items-center">
               <img
@@ -66,25 +123,13 @@ const Footer = () => {
                 src={logo}
                 alt="Acharya Beena Logo"
               />
-              <span className="ml-3 text-2xl font-bold text-gray-800 dark:text-white">
+              <span className="ml-3 text-2xl font-bold text-gray-800 dark:text-white font-serif">
                 Acharya Beena
               </span>
             </div>
             <p className="text-sm leading-6 text-gray-600 dark:text-gray-300">
               Guiding you through life's journey with the wisdom of the cosmos.
             </p>
-            <div className="flex space-x-6">
-              {socialLinks.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
-                >
-                  <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" aria-hidden="true" />
-                </a>
-              ))}
-            </div>
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
@@ -144,11 +189,28 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="mt-16 border-t border-gray-900/10 dark:border-white/10 pt-8 sm:mt-20 lg:mt-24">
-          <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">
-            &copy; {new Date().getFullYear()} Acharya Beena. All rights
-            reserved.
-          </p>
+
+        {/* Bottom Bar */}
+        <div className="mt-16 border-t border-black/10 dark:border-white/10 pt-8 sm:mt-20 lg:mt-16">
+          <div className="flex items-center justify-between">
+            <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">
+              &copy; {new Date().getFullYear()} Acharya Beena. All rights
+              reserved.
+            </p>
+            <div className="flex space-x-6">
+              {socialLinks.map((item) => (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+                  whileHover={{ scale: 1.2, y: -2 }}
+                >
+                  <span className="sr-only">{item.name}</span>
+                  <item.icon className="h-6 w-6" aria-hidden="true" />
+                </motion.a>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </footer>

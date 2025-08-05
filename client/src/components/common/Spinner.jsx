@@ -1,27 +1,66 @@
 import React from "react";
+import { motion } from "framer-motion";
 
-const Spinner = () => {
+const Spinner = ({ size = "md" }) => {
+  const sizeClasses = {
+    sm: "h-6 w-6",
+    md: "h-8 w-8",
+    lg: "h-12 w-12",
+  };
+
   return (
-    <svg
-      className="animate-spin h-8 w-8 text-indigo-600 dark:text-nebula-purple"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      ></circle>
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      ></path>
-    </svg>
+    <div className="flex justify-center items-center">
+      <div className={`relative ${sizeClasses[size]}`}>
+        {/* The main rotating container */}
+        <motion.div
+          className="w-full h-full"
+          animate={{ rotate: 360 }}
+          transition={{
+            loop: Infinity,
+            ease: "linear",
+            duration: 2,
+          }}
+        >
+          {/* Celestial Orb 1 (Large, Faint) */}
+          <motion.div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-1/3 bg-indigo-600/50 dark:bg-nebula-purple/50 rounded-full"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{
+              loop: Infinity,
+              ease: "easeInOut",
+              duration: 1.5,
+              delay: 0.2,
+            }}
+          />
+
+          {/* Celestial Orb 2 (Medium) */}
+          <motion.div
+            className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-indigo-600/70 dark:bg-nebula-purple/70 rounded-full"
+            style={{ transformOrigin: "150% 50%" }}
+            animate={{ scale: [1, 0.8, 1] }}
+            transition={{
+              loop: Infinity,
+              ease: "easeInOut",
+              duration: 1.5,
+              delay: 0.5,
+            }}
+          />
+
+          {/* Celestial Orb 3 (Small, Bright) */}
+          <motion.div
+            className="absolute bottom-0 right-0 w-1/5 h-1/5 bg-indigo-600 dark:bg-nebula-purple rounded-full"
+            style={{ transformOrigin: "-50% -50%" }}
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{
+              loop: Infinity,
+              ease: "easeInOut",
+              duration: 1.5,
+              delay: 0.8,
+            }}
+          />
+        </motion.div>
+      </div>
+    </div>
   );
 };
 

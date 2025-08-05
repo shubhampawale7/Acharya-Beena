@@ -1,92 +1,158 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { CheckBadgeIcon } from "@heroicons/react/24/solid";
-import { Constellation } from "./common/Constellation";
+// src/components/AboutSnippet.jsx
 
+import React, { useRef } from "react";
+import { Link } from "react-router-dom";
+import { motion, useInView } from "framer-motion";
+import {
+  AcademicCapIcon,
+  SparklesIcon,
+  UserCircleIcon,
+  ArrowRightIcon,
+} from "@heroicons/react/24/solid";
+
+// Updated highlights with more thematic icons
 const highlights = [
   {
-    name: "Certified Expertise",
-    description: "Holding certifications in various astrological disciplines.",
+    name: "Verified Expertise",
+    description: "Certified in multiple astrological disciplines.",
+    icon: AcademicCapIcon,
   },
   {
-    name: "Personalized Approach",
-    description: "Every reading is tailored to your unique life circumstances.",
+    name: "Personalized Guidance",
+    description: "Readings tailored to your unique soul blueprint.",
+    icon: UserCircleIcon,
   },
   {
-    name: "Holistic Guidance",
-    description: "Combining ancient wisdom with practical, modern advice.",
+    name: "Holistic Empowerment",
+    description: "Ancient wisdom for modern challenges.",
+    icon: SparklesIcon,
   },
 ];
 
+// Main Redesigned Component
 const AboutSnippet = () => {
+  const ref = useRef(null);
+  // The 'amount: 0.3' means the animation will trigger when 30% of the component is visible
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  // Animation variants for staggering the children elements
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.1 },
+    },
+  };
+
+  // Animation for individual items sliding up and fading in
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
   return (
-    <div className="relative bg-white dark:bg-transparent py-16 sm:py-24 overflow-hidden">
-      <Constellation className="absolute top-0 right-0 w-96 h-96 text-gray-200/50 dark:text-nebula-purple/10 transform -translate-y-1/4 translate-x-1/4" />
+    <div
+      ref={ref}
+      className="relative bg-white dark:bg-deep-space py-24 sm:py-32 overflow-hidden"
+    >
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Decorative background gradient */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[80%] bg-gradient-to-t from-deep-space via-deep-space/80 to-transparent dark:bg-gradient-to-t dark:from-black/50 dark:via-deep-space/50 dark:to-transparent rounded-full blur-[80px] opacity-40"></div>
 
-      <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:gap-24 lg:items-center">
-        <div className="relative sm:py-16 lg:py-0">
-          <div className="relative mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-0 lg:max-w-none lg:py-20">
-            {/* Image placeholder */}
-            <div className="relative pt-64 pb-10 rounded-2xl shadow-xl overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
-              <img
-                className="absolute inset-0 h-full w-full object-cover"
-                src="//images.unsplash.com/photo-1678082309527-7c47ac57d738?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="A representation of astrology and wisdom with constellations"
-              />
-            </div>
-          </div>
-        </div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12 lg:items-center"
+        >
+          {/* LEFT COLUMN: Content */}
+          <div className="relative z-10">
+            <motion.h2
+              variants={itemVariants}
+              className="font-serif text-3xl font-bold tracking-tight text-gray-900 dark:text-starlight sm:text-5xl"
+            >
+              Guiding You With <br />
+              <span className="text-nebula-purple">Cosmic Clarity</span>
+            </motion.h2>
 
-        <div className="relative mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-0">
-          {/* Content area */}
-          <div className="pt-12 sm:pt-16 lg:pt-20">
-            <h2 className="text-3xl text-gray-900 dark:text-starlight font-extrabold tracking-tight sm:text-4xl">
-              Meet Acharya Beena
-            </h2>
-            <div className="mt-6 text-gray-500 dark:text-gray-300 space-y-6">
-              <p className="text-lg">
-                With a deep passion for the cosmic sciences, I am dedicated to
-                helping individuals find clarity and purpose. My journey into
-                astrology was driven by a desire to understand the deeper
-                currents that shape our lives.
-              </p>
-              <p className="text-base leading-7">
-                Today, I use this sacred knowledge to offer guidance, support,
-                and empowerment to my clients, helping them navigate challenges
-                and embrace their true potential.
-              </p>
-            </div>
-            <div className="mt-10">
-              <dl className="space-y-4">
-                {highlights.map((highlight) => (
-                  <div key={highlight.name} className="relative">
-                    <dt>
-                      <CheckBadgeIcon
-                        className="absolute h-6 w-6 text-indigo-600 dark:text-nebula-purple"
-                        aria-hidden="true"
-                      />
-                      <p className="ml-9 text-lg leading-6 font-medium text-gray-900 dark:text-starlight">
-                        {highlight.name}
-                      </p>
-                    </dt>
-                    <dd className="mt-1 ml-9 text-base text-gray-500 dark:text-gray-400">
-                      {highlight.description}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="mt-10">
-                <Link
-                  to="/about"
-                  className="text-base font-medium text-indigo-600 dark:text-nebula-purple hover:underline"
+            <motion.p
+              variants={itemVariants}
+              className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+            >
+              I am Acharya Beena, a certified astrologer dedicated to
+              translating the profound wisdom of the stars into practical,
+              empowering guidance. My mission is to help you uncover your innate
+              strengths and navigate your life's path with confidence and
+              purpose.
+            </motion.p>
+
+            {/* Highlights Section */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-10 flex gap-x-8 gap-y-6 flex-wrap"
+            >
+              {highlights.map((highlight) => (
+                <motion.div
+                  key={highlight.name}
+                  whileHover={{ scale: 1.1, rotate: 3 }}
+                  className="flex items-center gap-3"
                 >
-                  Learn more about my journey{" "}
-                  <span aria-hidden="true">&rarr;</span>
-                </Link>
+                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-nebula-purple/10 text-nebula-purple">
+                    <highlight.icon className="h-6 w-6" aria-hidden="true" />
+                  </div>
+                  <span className="font-semibold text-gray-800 dark:text-starlight">
+                    {highlight.name}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Call-to-Action Button */}
+            <motion.div variants={itemVariants} className="mt-12">
+              <Link to="/about">
+                <motion.button
+                  className="relative inline-flex items-center gap-x-3 rounded-full bg-nebula-purple px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-nebula-purple/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nebula-purple focus:ring-offset-deep-space"
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0px 10px 30px rgba(168, 85, 247, 0.5)",
+                  }}
+                  transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                >
+                  Discover My Journey
+                  <ArrowRightIcon className="h-5 w-5" />
+                </motion.button>
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* RIGHT COLUMN: Image */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, scale: 0.8, x: 50 },
+              visible: {
+                opacity: 1,
+                scale: 1,
+                x: 0,
+                transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+              },
+            }}
+            className="w-full max-w-md mx-auto lg:max-w-none"
+          >
+            <div className="relative rounded-3xl p-2 bg-gradient-to-br from-nebula-purple/50 to-deep-space/30 shadow-2xl shadow-deep-space/50">
+              <div className="rounded-[18px] overflow-hidden">
+                <img
+                  className="w-full h-full object-cover aspect-[4/5]"
+                  src="//images.unsplash.com/photo-1678082309527-7c47ac57d738?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="A representation of astrology and wisdom with constellations"
+                />
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
