@@ -120,7 +120,9 @@ EMAIL_PASS=your-16-character-app-password
 
 ## 📸 Screenshots
 
-_Add screenshots of the home page, dashboard, booking system, etc._
+![Dashboard Page](image-2.png)
+![Horoscope Page](image-3.png)
+![About Page](image-4.png)
 
 ---
 
