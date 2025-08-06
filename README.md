@@ -5,9 +5,7 @@
 
 This is a full-stack **MERN** application built for **Acharya Beena**, a certified astrologer. The website serves as a professional platform to showcase her services, share astrology insights, and manage client bookings. It includes a complete public-facing website, a secure user system, and a powerful admin panel.
 
-> _A screenshot of the homepage would go here._
-
----
+## ![Home Page](image.png)
 
 ## ✨ Features
 
