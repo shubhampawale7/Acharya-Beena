@@ -134,4 +134,4 @@ This project is licensed for use by Acharya Beena. For custom builds or collabor
 
 ## 👩‍💻 Developer
 
-Built with ❤️ by [Shubham Pawale](https://www.shubhampawae.info)
+Built with ❤️ by [Shubham Pawale](https://www.shubhampawale.info)
